@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Deividu44/fullStackOpenPart3#readme",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "morgan": "^1.10.0"
   },
