@@ -1,7 +1,8 @@
 const express = require('express')
+require('dotenv').config()
 const morgan = require('morgan')
 const cors = require('cors')
-
+const Person = require('./models/person')
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -19,12 +20,10 @@ morgan.token('person', req => {
    
 })
 
-
-
 let persons = [
   { 
     "id": 1,
-    "name": "Arto Hellas", 
+    "name": "Artos Hellas", 
     "number": "040-123456"
   },
   { 
@@ -54,22 +53,12 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-
-  res.json(persons)
+  Person.find({}).then(result => res.json(result))
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find(p => p.id === id)
-
-  if(person) {
-    res.json(person)
-    console.log('Found')
-  } else {
-    res.status(404).end()
-
-  }
-
+  Person.findById(req.params.id)
+  .then(result => res.json(result))
 })
 
 app.get('/info', (req, res) => {
@@ -88,20 +77,18 @@ app.post('/api/persons', morganCustom, (req,res) => {
     })
   }
 
-  const isPerson = persons.find(p => p.name === body.name)
+  const isPerson = Person.find({ name: body.name })
+  console.log(isPerson)
   if(isPerson) return res.status(400).json({ // Check if name exists
     error: "Name must be unique"
   })
 
-  const newPerson = {
+  const newPerson = new Person({
     name: body.name,
     number: body.number,
-    id: generateId()
-  }
-  persons.concat(newPerson)
-  //console.log(newPerson)
-  res.json(newPerson)
+  })
 
+  newPerson.save().then(savedPerson => res.json(savedPerson))
 })
 
 // DELETE
