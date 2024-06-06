@@ -19,7 +19,8 @@
   - [✔] Exercise 3.18*: Manage routes /api/persons/:id and info from BBDD
   - [✔] Exercise 3.19*: Apply ValidationError and show on frontend
   - [✔] Exercise 3.20*: Apply validtaion for number value
-  - [] Exercise 3.21: 
+  - [✔] Exercise 3.21: Check the project on Render deploy production
+  - [] Exercise 3.22: Add ESlint to your app
 
   [Deividu44 Phonebook Application on Render](https://fullstackopenpart3-p7oa.onrender.com/)
 
