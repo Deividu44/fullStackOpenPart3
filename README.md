@@ -20,8 +20,8 @@
   - [✔] Exercise 3.19*: Apply ValidationError and show on frontend
   - [✔] Exercise 3.20*: Apply validtaion for number value
   - [✔] Exercise 3.21: Check the project on Render deploy production
-  - [] Exercise 3.22: Add ESlint to your app
+  - [✔] Exercise 3.22: Add Eslint to your app
 
   [Deividu44 Phonebook Application on Render](https://fullstackopenpart3-p7oa.onrender.com/)
 
-  Llevaré unas 12,5 horas 
+  Llevaré unas 16,5 horas 

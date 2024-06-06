@@ -21,13 +21,13 @@ morgan.token('person', req => {
 
 const errorHandler = (error, req, res, next) => {
   if(error.name === 'CastError') {
-    return res.status(400).send({ error: "Malformatted id" })
+    return res.status(400).send({ error: 'Malformatted id' })
   } else if (error.name === 'ValidationError') {
       return res.status(400).send({ error: error.message })
   }
   next(error)
 }
-
+let hoal;
 // GET
 app.get('/', (req, res) => {
   res.send('<h1>Hello there</h1>')
@@ -72,7 +72,7 @@ app.post('/api/persons', morganCustom, (req,res, next) => {
   Person.find({ name: body.name })
   .then(person => {
     if(person === body.name) 
-      return res.status(400).json({ error: "Name must be unique"})
+      return res.status(400).json({ error: 'Name must be unique'})
   })
 
   const newPerson = new Person({
