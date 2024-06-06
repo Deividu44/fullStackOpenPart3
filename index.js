@@ -17,34 +17,15 @@ app.use(morgan('tiny'))
 app.use(cors())
 morgan.token('person', req => {
    return JSON.stringify(req.body)
-   
 })
 
-let persons = [
-  { 
-    "id": 1,
-    "name": "Artos Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
+const errorHandler = (error, req, res, next) => {
+  if(error.name === 'CastError') {
+    return res.status(400).send({ error: "Malformatted id" })
+  } else if (error.name === 'ValidationError') {
+      return res.status(400).send({ error: error.message })
   }
-]
-
-const generateId = () => {
-  return Math.floor(Math.random() * 2000)
+  next(error)
 }
 
 // GET
@@ -56,47 +37,74 @@ app.get('/api/persons', (req, res) => {
   Person.find({}).then(result => res.json(result))
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
-  .then(result => res.json(result))
+  .then(result => {
+    if (result) {
+      res.json(result)
+    } else {
+      res.status(404).end()
+    }
+  })
+  .catch(error => next(error))
 })
 
 app.get('/info', (req, res) => {
-  res.send(`<p>Phonebook has info for ${persons.length} people</p>
-  <br/> ${Date()}`)
+  Person.find({})
+  .then(people => {
+    res.send(`<p>Phonebook has info for ${people.length} people</p>
+    <br/> ${Date()}`)
+  })
+
 })
 
 const morganCustom = morgan(':method :url :status :res[content-length] - :response-time ms :person')
 // POST
-app.post('/api/persons', morganCustom, (req,res) => {
+app.post('/api/persons', morganCustom, (req,res, next) => {
   const body = req.body
-
+/*
   if(!body.name || !body.number) { // Check if body have name and number parameter
     return res.status(400).json({
       error: "Name or number is missing"
     })
   }
-
-  const isPerson = Person.find({ name: body.name })
-  console.log(isPerson)
-  if(isPerson) return res.status(400).json({ // Check if name exists
-    error: "Name must be unique"
+*/
+  Person.find({ name: body.name })
+  .then(person => {
+    if(person === body.name) 
+      return res.status(400).json({ error: "Name must be unique"})
   })
 
   const newPerson = new Person({
     name: body.name,
     number: body.number,
   })
-
-  newPerson.save().then(savedPerson => res.json(savedPerson))
+  newPerson.save()
+  .then(savedPerson => res.json(savedPerson))
+  .catch(error => next(error))
 })
 
 // DELETE
-  app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(p => p.id !== id)
-    res.status(204).end()
-  })
+app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+  .then(result => res.status(204).end())
+  .catch(error => next(error))
+})
+
+// PUT
+app.put('/api/persons/:id', (req, res, next) => {
+  const body = req.body
+
+  const newPerson = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(req.params.id, newPerson, {new: true})
+  .then(updatedPerson => res.json(updatedPerson))
+  .catch(error => next(error))
+
+})
 
 
 app.use(unknownEndpoint)
@@ -104,3 +112,4 @@ app.use(unknownEndpoint)
 app.listen(PORT, () => {
   console.log(`PhoneBook app listen to port ${PORT}`);
 })
+app.use(errorHandler)

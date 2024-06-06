@@ -13,7 +13,14 @@
   - [✔] Exercise 3.12: Create Phonebook DB and add a new register
   - [✔] Exercise 3.13: Get data persons from bbdd
   - [✔] Exercise 3.14: Post from frontend to bbdd
+  - [✔] Exercise 3.15: Add delete function on Backend
+  - [✔] Exercise 3.16: Create errorHandler middleware
+  - [✔] Exercise 3.17*: If person exists update the number
+  - [✔] Exercise 3.18*: Manage routes /api/persons/:id and info from BBDD
+  - [✔] Exercise 3.19*: Apply ValidationError and show on frontend
+  - [✔] Exercise 3.20*: Apply validtaion for number value
+  - [] Exercise 3.21: 
 
   [Deividu44 Phonebook Application on Render](https://fullstackopenpart3-p7oa.onrender.com/)
 
-  Llevaré unas 6 horas 
+  Llevaré unas 12,5 horas 
