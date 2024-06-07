@@ -1,2 +1,4 @@
 .env
 dist
+fullStackOpenPhonebook.code-workspace
+node_modules

@@ -27,7 +27,6 @@ const errorHandler = (error, req, res, next) => {
   }
   next(error)
 }
-let hoal;
 // GET
 app.get('/', (req, res) => {
   res.send('<h1>Hello there</h1>')
@@ -62,13 +61,7 @@ const morganCustom = morgan(':method :url :status :res[content-length] - :respon
 // POST
 app.post('/api/persons', morganCustom, (req,res, next) => {
   const body = req.body
-/*
-  if(!body.name || !body.number) { // Check if body have name and number parameter
-    return res.status(400).json({
-      error: "Name or number is missing"
-    })
-  }
-*/
+
   Person.find({ name: body.name })
   .then(person => {
     if(person === body.name) 
